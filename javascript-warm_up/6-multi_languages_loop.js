@@ -4,7 +4,6 @@ const lines = [
 'Python is cool',
 'JavaScript is amazing'
 ];
-  
 for (const line of lines) {
   console.log(line);
 }
