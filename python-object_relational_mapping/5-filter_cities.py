@@ -10,6 +10,7 @@ if __name__ == "__main__":
     user = sys.argv[1]
     password = sys.argv[2]
     database = sys.argv[3]
+    state_name = sys.argv[4]
 
     db = MySQLdb.connect(
         host="localhost",
@@ -20,10 +21,20 @@ if __name__ == "__main__":
     )
 
     cursor = db.cursor()
-    cursor.execute("SELECT * FROM states ORDER BY id ASC")
 
-    for row in cursor.fetchall():
-        print(row)
+    cursor.execute(
+        """
+        SELECT cities.name
+        FROM cities
+        JOIN states ON cities.state_id = states.id
+        WHERE states.name = %s
+        ORDER BY cities.id ASC
+        """,
+        (state_name,)
+    )
+
+    rows = cursor.fetchall()
+    print(", ".join(row[0] for row in rows))
 
     cursor.close()
     db.close()
